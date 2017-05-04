@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate
 import spock.lang.Ignore
 import spock.lang.Shared
 import spock.lang.Specification
-import steps.WireMockTestDataLoader
+
 import uk.gov.digital.ho.proving.financialstatus.acl.BankService
 import uk.gov.digital.ho.proving.financialstatus.api.DailyBalanceService
 import uk.gov.digital.ho.proving.financialstatus.api.configuration.ServiceConfiguration
@@ -25,7 +25,7 @@ import uk.gov.digital.ho.proving.financialstatus.domain.AccountStatusChecker
 
 import java.time.LocalDate
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup
@@ -82,9 +82,6 @@ class RestErrorsSpec extends Specification {
     def cleanupSpec() {
     }
 
-    def setup() {
-        testDataLoader = new WireMockTestDataLoader(stubPort)
-    }
 
     def cleanup() {
         testDataLoader?.stop()

@@ -4,7 +4,6 @@ import com.jayway.restassured.RestAssured;
 import com.jayway.restassured.builder.RequestSpecBuilder;
 import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.specification.RequestSpecification;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -16,25 +15,17 @@ import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.restassured.RestDocumentationFilter;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import steps.WireMockTestDataLoader;
 import uk.gov.digital.ho.proving.financialstatus.api.ServiceRunner;
 import uk.gov.digital.ho.proving.financialstatus.api.configuration.ServiceConfiguration;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.removeHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.restdocs.request.RequestDocumentation.requestParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.document;
 import static org.springframework.restdocs.restassured.RestAssuredRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.restassured.operation.preprocess.RestAssuredPreprocessors.modifyUris;
@@ -58,7 +49,7 @@ public class FinancialStatus {
     @Value("${local.server.port}")
     private int port;
 
-    private WireMockTestDataLoader testDataLoader;
+
     private int stubPort = 8089;
 
     private RequestSpecification documentationSpec;
@@ -117,18 +108,14 @@ public class FinancialStatus {
                 .addFilter(document)
                 .build();
 
-        testDataLoader = new WireMockTestDataLoader(stubPort);
+
     }
 
-    @After
-    public void tearDown() {
-        testDataLoader.stop();
-    }
+
 
     @Test
     public void commonHeaders() throws Exception {
 
-        testDataLoader.stubTestData("01010312", "/financialstatus/v1");
 
         given(documentationSpec)
             .spec(requestSpec)
@@ -153,7 +140,6 @@ public class FinancialStatus {
     @Test
     public void financialStatus() throws Exception {
 
-        testDataLoader.stubTestData("01010312", "/financialstatus/v1");
 
         given(documentationSpec)
             .spec(requestSpec)
@@ -198,7 +184,7 @@ public class FinancialStatus {
     @Test
     public void financialStatusFail() throws Exception {
 
-        testDataLoader.stubTestData("01010312", "/financialstatus/v1.*");
+
 
         given(documentationSpec)
             .spec(requestSpec)
@@ -269,7 +255,7 @@ public class FinancialStatus {
     @Test
     public void financialStatusNotEnoughData() throws Exception {
 
-        testDataLoader.stubTestData("toofew", "/financialstatus/v1.*");
+
 
         given(documentationSpec)
             .spec(requestSpec)
